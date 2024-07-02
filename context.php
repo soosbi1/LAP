@@ -58,6 +58,7 @@ $dbname = "patientenverwaltung";
 				echo "<th>SVNR</th>";
 				echo "<th>Beschwerde</th>";
 				echo "<th>Termin</th>";
+				echo "<th>Aktion</th>";
 				echo "</tr>";
 				echo "</thead>";
 				echo "<tbody>";
@@ -69,6 +70,7 @@ $dbname = "patientenverwaltung";
 					echo "<td>{$row['svnr']}</td>";
 					echo "<td>{$row['beschreibung']}</td>";
 					echo "<td>{$row['datum']}</td>";
+					echo '<td><a href="edit.php?id=' . $row['idPatient'] . '" class="btn btn-primary">Bearbeiten</a></td>';
 					echo "</tr>";
 				}
 				echo "</tbody>";
