@@ -1,24 +1,30 @@
 <?php
 require_once 'config.php';
 
-if (!isset($_GET['id'])) {
-    echo 'Benutzer-ID nicht gefunden!';
-    exit;
-}
-
 try {
-	$id = $_GET['id'];
+	// Request Id to update
+	if (isset($_GET['id'])) {
+	
+		$id = $_GET['id'];
 
-    $sql = 'SELECT * FROM patient as p
-	JOIN befund as b
-	ON p.idPatient = b.Patient_id
-	JOIN termin as t
-	ON b.Termin_terID = t.terID
-	WHERE idPatient = :id';
-    $stmt = $conn->prepare($sql);
-    $stmt->execute(['id' => $id]);
-    $patient = $stmt->fetch();
-} catch (Exception $e) {
+		// Preparing statement
+    	$stmt = $conn->prepare(
+			"SELECT * FROM patient as p
+			JOIN befund as b
+			ON p.idPatient = b.Patient_id
+			JOIN termin as t
+			ON b.Termin_terID = t.terID
+			WHERE idPatient = :id"
+		);
+		// Binding parameter to value
+		$stmt->bindParam(':id', $id);
+		// Executing statement
+    	$stmt->execute();
+		// Declaring and initializing variable to result
+    	$patient = $stmt->fetch();
+	}
+} 
+catch (Exception $e) {
     echo 'Fehler beim Abrufen des Benutzers: ' . $e->getMessage();
 }
 ?>

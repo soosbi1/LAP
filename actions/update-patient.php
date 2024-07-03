@@ -1,8 +1,8 @@
 <?php
 require_once '../config.php';
 try {
+    // Requesting variable from submitted form
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
         $id = $_POST['id'];
 		$vorname = $_POST['vorname'];
 		$nachname = $_POST['nachname'];
@@ -11,9 +11,10 @@ try {
 		$beschreibung = $_POST['beschreibung'];
 		$datum = $_POST['datum'];
 
+		// Starting transaction for multiple statements
         $conn->beginTransaction();
 
-    	// update patient table
+    	// Update patient table
         $stmt = $conn->prepare("UPDATE patient as p
 								JOIN befund as b ON p.idPatient = b.Patient_id
 								JOIN termin as t ON b.Termin_terID = t.terID 
@@ -27,6 +28,7 @@ try {
 								Sozialversicherung_sozID = 1,
 								Arztpraxis_idArztpraxis = 1
 								WHERE idPatient = :id");
+		// Binding params to values
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':vorname', $vorname);
         $stmt->bindParam(':nachname', $nachname);
@@ -34,14 +36,18 @@ try {
         $stmt->bindParam(':svnr', $svnr);
         $stmt->bindParam(':beschreibung', $beschreibung);
         $stmt->bindParam(':datum', $datum);
+		// Executing statement
         $stmt->execute();
 
         // Commit the transaction
         $conn->commit();
 
-		session_start();
+		// Starting session
+        session_start();
+        // Setting session variable
 		$_SESSION['message'] = 'Patient aktualisiert!';
 
+		// Setting location
 		header('Location: ../search.php');
     }
 }

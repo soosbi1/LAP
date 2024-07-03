@@ -2,11 +2,14 @@
 require_once 'config.php';
 
 try {
+	// If filter request
 	if (isset($_GET['search'])) {
 		
+		// Neither exact nor case sensitive 
 		$search = '%' . $_GET['search'] . '%';
 		$search = strtolower($search);
-
+		
+		// Preparing select statement considering filter
 		$stmt = $conn->prepare("
 			SELECT p.*, b.beschreibung, t.datum
 			FROM patient p
@@ -15,9 +18,11 @@ try {
 			WHERE LOWER(p.vorname) LIKE :search
 			OR LOWER(p.nachname) LIKE :search"
 		);
+		// Binding param to value
 		$stmt->bindParam(':search', $search);
 	}
 	else {
+		// Preparing select statement
 		$stmt = $conn->prepare("
 			SELECT p.*, b.beschreibung, t.datum
 			FROM patient p
@@ -25,10 +30,12 @@ try {
 			JOIN termin t ON b.Termin_terID = t.terID"
 		);
 	}
+	// Executing either filtered or unfiltered statement
 	$stmt->execute();
+	// Fetching results
 	$patients = $stmt->fetchAll();
 } catch (PDOException $e) {
-	echo "<div class='alert alert-danger mt-3'>Datenbankfehler: " . $e->getMessage() . "</div>";
+	echo "Datenbankfehler: " . $e->getMessage();
 }
 ?>
 
@@ -46,12 +53,12 @@ try {
 			<?php 
 			session_start();
 
-			// Check if there is an alert message in the session
+			// Check if there is a message in the session
 			if (isset($_SESSION['message'])) {
-				// Output the alert message
+				// Output the message
 				echo "<div class='alert alert-success'>{$_SESSION['message']}</div>";
 
-				// Unset the alert message so it doesn't show again
+				// Unset the message so it doesn't show again
 				unset($_SESSION['message']);
 			}
 			?>
