@@ -35,18 +35,26 @@ try {
 <!doctype html>
 <html data-bs-theme="dark">
 	<head>
-		<?php
-		include("head.php");
-		?>
+		<?php include 'components/head.php' ?>
 	</head>
 	<header>
-		<?php
-		include("nav.php");
-		?>
+		<?php include 'components/nav.php' ?>
 	</header>
 	<body>
 		<h1>Suche</h1>
 		<div class="container mt-5">
+			<?php 
+			session_start();
+
+			// Check if there is an alert message in the session
+			if (isset($_SESSION['message'])) {
+				// Output the alert message
+				echo "<div class='alert alert-success'>{$_SESSION['message']}</div>";
+
+				// Unset the alert message so it doesn't show again
+				unset($_SESSION['message']);
+			}
+			?>
 			<h2>Patienten abfragen</h2>
 			<form action="" method="get">
 				<div class="form-group">

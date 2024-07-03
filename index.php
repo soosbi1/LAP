@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html data-bs-theme="dark">
 	<head>
-		<?php include 'head.php'; ?>
+		<?php include 'components/head.php'; ?>
 	</head>
 	<header>
-		<?php include 'nav.php'; ?>
+		<?php include 'components/nav.php'; ?>
 	</header>
 	<body>
 		<h1>Home</h1>
